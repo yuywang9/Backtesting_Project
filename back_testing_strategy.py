@@ -21,13 +21,14 @@ class MovingAverageCrossover(bt.Strategy):
     def __init__(self):
         self.short_ma = bt.indicators.SimpleMovingAverage(self.data.close, period = 10)
         self.long_ma = bt.indicators.SimpleMovingAverage(self.data.close, period = 30)
+        self.rsi = bt.indicators.RSI(self.data.close, period = 14)
     
     def next(self):
         if not self.position:
-            if self.short_ma > self.long_ma:
+            if self.short_ma > self.long_ma and self.rsi < 40:
                 self.buy()
         else:
-            if self.short_ma < self.long_ma:
+            if self.short_ma < self.long_ma and self.rsi > 60:
                 self.sell()
                 
 cerebro = bt.Cerebro()
